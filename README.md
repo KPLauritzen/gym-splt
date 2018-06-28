@@ -1,4 +1,4 @@
-## Gym env for the spl-t game
+## Gym env for the SPL-T game
 
 Wrapper around a simulation of SPL-T, to fit it into the `gym` reinforcement learning framework.
 
@@ -12,13 +12,12 @@ pip install -e .
 ### Usage
 To initialize the env:
 ```
-from gym_spl_t.envs import SpltEnv
+from gym_splt.envs import SpltEnv
 env = SpltEnv()
 env.reset()
 ```
 
 See [gym docs]( https://github.com/openai/gym ) for further instruction in how to interact with a `gym.Env`. 
-
 
 
 ### Credits

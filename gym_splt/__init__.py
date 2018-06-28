@@ -1,6 +1,6 @@
 from gym.envs.registration import register
 
 register(
-    id='spl-t-v0',
-    entry_point='gym_spl_t.envs.SpltEnv'
+    id='splt-v0',
+    entry_point='gym_splt.envs.SpltEnv'
 )
