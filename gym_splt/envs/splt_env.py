@@ -19,19 +19,22 @@ class SpltEnv(gym.Env):
         self.n_actions = width * height
         self.action_space = spaces.Discrete(self.n_actions)
         self.observation_space = spaces.Box(low=0, high=1, shape=self.state.shape, dtype=np.uint8)
+        self.time = 0
 
     def step(self, action):
+        self.time += 1
         # Translate action to (x,y) coordinates
         x = action % self.width
         y = action // self.width
-        print(f'action: {action}, x: {x}, y: {y}')
+        #print(f'action: {action}, x: {x}, y: {y}')
         pre_score = self.board.score
         possible = split_x_y(self.board, x, y)
 
         # Check if move can be made
         if not possible:
             # Punish for making impossible moves
-            self.board.score /= 2
+            #self.board.score -= 10
+            pass
         reward = self.board.score - pre_score
         self.state = self._get_state()
 
@@ -43,6 +46,7 @@ class SpltEnv(gym.Env):
     def reset(self):
         self.board = core.Board(width=self.width, height=self.height)
         self.state = self._get_state()
+        self.time = 0
         return self.state
 
     def render(self, mode='human', close=False):
@@ -59,7 +63,7 @@ class SpltEnv(gym.Env):
         else: 
             state[0,0] = 1
 
-        return state
+        return state.flatten()
 
     def _is_done(self):
         move_options = self.board.getMoveOptions()
@@ -76,5 +80,5 @@ def split_x_y(board, x, y):
         if box.x <= x < (box.x + box.width):
             if box.y <= y < (box.y + box.height):
                 return core.makeMove(board, boxindex)
-    print('no split possible')
+    #print('no split possible')
     return False

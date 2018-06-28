@@ -212,7 +212,7 @@ def makeMove(gameBoard,chosenBox):
         drawScreen(gameBoard)
         print("-------- 1. Try to execute the split")
     if gameBoard.split(gameBoard.box[chosenBox])==0:
-        print("Problem trying to split box {0}, aborting".format(chosenBox))
+        #print("Problem trying to split box {0}, aborting".format(chosenBox))
         return False
 
     gameBoard.splitRecord.append(chosenBox)
