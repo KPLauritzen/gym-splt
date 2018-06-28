@@ -4,8 +4,8 @@ Wrapper around a simulation of SPL-T, to fit it into the `gym` reinforcement lea
 
 ### Installation
 ```
-git clone <repo>
-cd <repo>
+git clone https://github.com/KPLauritzen/gym-splt
+cd gym-splt
 pip install -e .
 ```
 
@@ -22,4 +22,5 @@ See [gym docs]( https://github.com/openai/gym ) for further instruction in how t
 
 ### Credits
 Inspired by the game [SPL-T](http://simogo.com/work/spl-t/) by SIMOGO. 
+
 The core simulation was done by Craig Polley in [brute_spl-t](https://gitlab.com/flashingLEDs/brute_spl-t).
