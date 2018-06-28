@@ -1,1 +1,1 @@
-from gym_spl_t.envs.splt_env import SpltEnv
+from gym_splt.envs.splt_env import SpltEnv

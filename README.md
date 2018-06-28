@@ -12,9 +12,9 @@ pip install -e .
 ### Usage
 To initialize the env:
 ```
-from gym_splt.envs import SpltEnv
-env = SpltEnv()
-env.reset()
+import gym
+import gym_splt
+env = gym.make('splt-v0)
 ```
 
 See [gym docs]( https://github.com/openai/gym ) for further instruction in how to interact with a `gym.Env`. 
