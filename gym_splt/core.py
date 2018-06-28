@@ -34,6 +34,8 @@ startBeingVerboseAfterMoveNumber=999999 #If you are only interested in debug inf
 
 HORIZONTAL='-'
 VERTICAL='|'
+VOID='*'
+NOPOINT=' '
 
 
 ##########################################
@@ -52,7 +54,7 @@ class Board(object): # Board class represents the gameboard during play.
 
         # Initialize an ascii screen buffer. It's bigger than BoardWidth*BoardHeight because we also want to draw borders
         # This is not just for display to the console! Certain game logic will rely on this
-        self.screenBuffer = [[' ' for x in range((self.width*2)+1)] for x in range(((self.height)*2)+1)]
+        self.screenBuffer = [[NOPOINT for x in range((self.width*2)+1)] for x in range(((self.height)*2)+1)]
 
 
     def makeBox(self,x,y,width,height,points):
@@ -150,32 +152,32 @@ def updateScreenBuffer(gameBoard):
 ##########################################
     for ii in range((gameBoard.width*2)+1):
         for jj in range((gameBoard.height*2)+1):
-            gameBoard.screenBuffer[jj][ii]=' '
+            gameBoard.screenBuffer[jj][ii]=NOPOINT
 
     for ii in range(gameBoard.width):
         for jj in range(gameBoard.height):
-            gameBoard.screenBuffer[(jj*2)+1][(ii*2)+1]='*'
+            gameBoard.screenBuffer[(jj*2)+1][(ii*2)+1]=VOID
 
     #for all boxes
     for boxindex,box in enumerate(gameBoard.box):
         #Draw the top and bottom lines
         for ii in range((box.width*2)+1):
-            gameBoard.screenBuffer[box.y*2][(box.x*2)+ii]='-'
-            gameBoard.screenBuffer[(box.y*2)+(box.height*2)][(box.x*2)+ii]='-'
+            gameBoard.screenBuffer[box.y*2][(box.x*2)+ii]=HORIZONTAL
+            gameBoard.screenBuffer[(box.y*2)+(box.height*2)][(box.x*2)+ii]=HORIZONTAL
 
         #Draw the sides
         for ii in range((box.height*2)+1):
-            gameBoard.screenBuffer[(box.y*2)+ii][(box.x*2)]='|'
-            gameBoard.screenBuffer[(box.y*2)+ii][(box.x*2)+(box.width*2)]='|'
+            gameBoard.screenBuffer[(box.y*2)+ii][(box.x*2)]=VERTICAL
+            gameBoard.screenBuffer[(box.y*2)+ii][(box.x*2)+(box.width*2)]=VERTICAL
 
         #Draw the nature of the space: void, no-point block or point block
         for jj in range(box.height):
             for ii in range(box.width):
                 if box.points==-1:
-                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]='*'
+                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=VOID
 
                 elif box.points==0:
-                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=' '
+                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=NOPOINT
 
                 else:
                     gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]='p'
@@ -344,7 +346,7 @@ def makeMove(gameBoard,chosenBox):
 
     for ii in range(gameBoard.width):
         for jj in range(gameBoard.height):
-            if gameBoard.screenBuffer[((jj)*2)+1][((ii)*2)+1] =='*':
+            if gameBoard.screenBuffer[((jj)*2)+1][((ii)*2)+1] ==VOID:
                 if not ii in columnsWithVoids: columnsWithVoids.append(ii)
 
 
@@ -375,7 +377,7 @@ def makeMove(gameBoard,chosenBox):
                     jj=0	# jj= number of voids below the ii'th column of this box
                     while stopFound==False:
                         if box.y+box.height+jj<gameBoard.height:
-                            if gameBoard.screenBuffer[((box.y+jj+box.height)*2)+1][((box.x+ii)*2)+1] !='*':
+                            if gameBoard.screenBuffer[((box.y+jj+box.height)*2)+1][((box.x+ii)*2)+1] !=VOID:
                                 stopFound=True
                             else:
                                 jj+=1
@@ -436,7 +438,7 @@ def makeMove(gameBoard,chosenBox):
             stopRowScan=False
 
             while stopRowScan==False:
-                if gameBoard.screenBuffer[(row*2)+1][(column*2)+1] =='*' and row in rowsWithDestruction: voidCount+=1
+                if gameBoard.screenBuffer[(row*2)+1][(column*2)+1] == VOID and row in rowsWithDestruction: voidCount+=1
                 else: stopRowScan=True # As soon as you hit a non-void, you're done with this column
 
                 row+=1
@@ -452,7 +454,7 @@ def makeMove(gameBoard,chosenBox):
             stopRowScan=False
 
             while stopRowScan==False:
-                if gameBoard.screenBuffer[(row*2)+1][(column*2)+1] =='*': voidCount+=1
+                if gameBoard.screenBuffer[(row*2)+1][(column*2)+1] == VOID: voidCount+=1
                 else: stopRowScan=True # As soon as you hit a non-void, you're done with this column
 
                 row+=1
@@ -587,7 +589,7 @@ def makeMove(gameBoard,chosenBox):
                             jj=0
                             while stopFound==False:
                                 if height+jj<gameBoard.height:
-                                    if gameBoard.screenBuffer[((height+jj)*2)+1][((kk)*2)+1] !='*':
+                                    if gameBoard.screenBuffer[((height+jj)*2)+1][((kk)*2)+1] !=VOID:
                                         stopFound=True
                                     else:
                                         jj+=1
