@@ -1,7 +1,7 @@
 import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
-from gym_spl_t import core
+from gym_splt import core
 import numpy as np
 
 class SpltEnv(gym.Env):
