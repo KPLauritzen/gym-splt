@@ -23,4 +23,4 @@ See [gym docs]( https://github.com/openai/gym ) for further instruction in how t
 ### Credits
 Inspired by the game [SPL-T](http://simogo.com/work/spl-t/) by SIMOGO. 
 
-The core simulation was done by Craig Polley in [brute_spl-t](https://gitlab.com/flashingLEDs/brute_spl-t).
+The core simulation was done by Craig Polley in [brute_spl-t](https://gitlab.com/flashingLEDs/brute_spl-t). Read his excellent write-up on taking lots of random actions in the game [here](www.flashingleds.net/brute_SPL-T/brute_spl-t.html) with HN discussion [here](https://news.ycombinator.com/item?id=17171146).
