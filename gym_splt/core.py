@@ -180,7 +180,7 @@ def updateScreenBuffer(gameBoard):
                     gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=NOPOINT
 
                 else:
-                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]='p'
+                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=box.points
                     # TODO: This could be box.points instead
 
 

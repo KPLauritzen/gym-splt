@@ -15,6 +15,7 @@ class SpltEnv(gym.Env):
         self.width = width
         self.height = height
         self.board = core.Board(width=self.width, height=self.height)
+        self.n_state_layers = 4
         self.state = self._get_state()
         self.n_actions = width * height
         self.action_space = spaces.Discrete(self.n_actions)
@@ -52,9 +53,36 @@ class SpltEnv(gym.Env):
     def render(self, mode='human', close=False):
         core.drawScreen(self.board)
 
+    def _get_board_state(self, buffer=None):
+        if buffer is None:
+            buffer = np.array(self.board.screenBuffer)
+        state = np.zeros(shape=(self.n_state_layers, self.height, self.width))
+        # Layer 0: Void
+        # Layer 1: log2(points)
+        # Layer 2: Is wall on top?
+        # Layer 3: Is wall on left?
+        
+        return state
+
+
+    def _get_state_metadata(self, buffer=None):
+        if buffer is None:
+            buffer = np.array(self.board.screenBuffer)
+        state = np.zeros(2)
+        # Indicate parity
+        if self.board.splitAction == core.VERTICAL:
+            parity = 0
+        else: 
+            parity = 1
+        state[0] = parity
+        return state
+
+
     def _get_state(self):
         core.updateScreenBuffer(self.board)
         buffer = np.array(self.board.screenBuffer)
+        board_state = self._get_board_state(buffer)
+        meta_state = self._get_state_metadata()
         state = np.vectorize(translate_buffer_to_state.get)(buffer)
 
         # Indicate parity in top left corner
