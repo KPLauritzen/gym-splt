@@ -21,7 +21,7 @@ class SpltEnv(gym.Env):
         self.n_actions = width * height
         self.action_space = spaces.Discrete(self.n_actions)
         self.observation_space = spaces.Box(low=0, high=15, 
-            shape=self.state.shape, dtype=np.uint8), # board state
+            shape=self.state.shape, dtype=np.uint8)
         self.time = 0
 
     def step(self, action):
