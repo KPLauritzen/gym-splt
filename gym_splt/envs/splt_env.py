@@ -6,13 +6,16 @@ import numpy as np
 from math import log2
 
 translate_buffer_to_state = {
-    core.NOPOINT:0, core.VOID:-1,
-    core.HORIZONTAL:1, core.VERTICAL:1, 
-    'p':1
+    core.NOPOINT: 0, core.VOID: -1,
+    core.HORIZONTAL: 1, core.VERTICAL: 1, 
+    'p': 1
 }
+
+
 class SpltEnv(gym.Env):
     metadata = {'render.modes': ['human']}
-    def __init__(self, width=8, height=16):
+
+    def __init__(self, width=8, height=16, max_time=500):
         self.width = width
         self.height = height
         self.board = core.Board(width=self.width, height=self.height)
@@ -23,6 +26,7 @@ class SpltEnv(gym.Env):
         self.observation_space = spaces.Box(low=0, high=15, 
             shape=self.state.shape, dtype=np.uint8)
         self.time = 0
+        self.max_time = max_time
 
     def step(self, action):
         self.time += 1
@@ -42,7 +46,6 @@ class SpltEnv(gym.Env):
         # Check if we are done
         done = self._is_done()
         return (self.state, reward, done, {})
-
 
     def reset(self):
         self.board = core.Board(width=self.width, height=self.height)
@@ -85,10 +88,9 @@ class SpltEnv(gym.Env):
         state[3] = side
         # Layer 4: metadata - game length, vert/horizontal parity
         metadata = self._get_state_metadata()
-        state[4,0,:2] = metadata
+        state[4, 0, :2] = metadata
 
         return state
-
 
     def _get_state_metadata(self):
         # Indicate parity
@@ -105,7 +107,6 @@ class SpltEnv(gym.Env):
         state[1] = log2_game_length
         return state
 
-
     def _get_state(self):
         core.updateScreenBuffer(self.board)
         buffer = np.array(self.board.screenBuffer)
@@ -118,6 +119,9 @@ class SpltEnv(gym.Env):
         if len(move_options) == 0:
             # If there are no possible moves, the game is over
             done = True
+        elif self.time > self.max_time:
+            # We have taken more move attempts than max_time
+            done = True
         else:
             done = False
         return done
@@ -128,5 +132,4 @@ def split_x_y(board, x, y):
         if box.x <= x < (box.x + box.width):
             if box.y <= y < (box.y + box.height):
                 return core.makeMove(board, boxindex)
-    #print('no split possible')
     return False
