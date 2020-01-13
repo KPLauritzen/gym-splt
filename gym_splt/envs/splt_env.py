@@ -15,7 +15,7 @@ translate_buffer_to_state = {
 class SpltEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, width=8, height=16, max_time=500):
+    def __init__(self, width=4, height=8, max_time=500):
         self.width = width
         self.height = height
         self.board = core.Board(width=self.width, height=self.height)
@@ -27,6 +27,7 @@ class SpltEnv(gym.Env):
             shape=self.state.shape, dtype=np.uint8)
         self.time = 0
         self.max_time = max_time
+        self.penalty_impossible = 1
 
     def step(self, action):
         self.time += 1
@@ -39,7 +40,7 @@ class SpltEnv(gym.Env):
         # Check if move can be made
         if not possible:
             # Punish for making impossible moves
-            self.board.score -= 1
+            self.board.score -= self.penalty_impossible
         reward = self.board.score - pre_score
         self.state = self._get_state()
 

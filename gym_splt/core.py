@@ -180,7 +180,7 @@ def updateScreenBuffer(gameBoard):
                     gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=NOPOINT
 
                 else:
-                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1]=box.points
+                    gameBoard.screenBuffer[((box.y+jj)*2)+1][((box.x+ii)*2)+1] = box.points
                     # TODO: This could be box.points instead
 
 
@@ -192,12 +192,23 @@ def updateScreenBuffer(gameBoard):
 def drawScreen(gameBoard):
 ##########################################
     updateScreenBuffer(gameBoard)
+    max_length_points = get_max_digits_points(gameBoard)
     for jj in range((gameBoard.height*2)+1):
         for ii in range((gameBoard.width*2)+1):
-            print(gameBoard.screenBuffer[jj][ii],end='')
-        print('\n',end='')
+            value = gameBoard.screenBuffer[jj][ii]
+            if isinstance(value, int):
+                value = str(value)
+            value = ' ' * (max_length_points - len(value)) + value
+            print(value, end='')
+        print('\n', end='')
 
-
+def get_max_digits_points(game_board):
+    max_digits = 1
+    for box in game_board.box:
+        digits = len(str(box.points))
+        if digits > max_digits:
+            max_digits = digits
+    return max_digits
 # Evolves an input gameBoard forward, given that you are choosing to split chosenBox on that gameBoard
 ##########################################
 def makeMove(gameBoard,chosenBox):
@@ -654,7 +665,7 @@ def makeMove(gameBoard,chosenBox):
 
         # Any newly created clusters should also be immediately decremented and points awarded (they weren't around when the rest of the blocks had this done)
         for box in gameBoard.box:
-            if box.temppoints is not 0:
+            if box.temppoints != 0:
                 box.points+=box.temppoints-1
                 countDownScore+=1
                 box.temppoints=0
